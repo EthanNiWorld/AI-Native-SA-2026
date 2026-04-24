@@ -1,13 +1,13 @@
 # 知识库全局索引
 
 > 本文件是知识库的全局索引，Skill 必读。
-> 最后更新: 2026-04-23
+> 最后更新：2026-04-24
 
 ## 道：AI 领域知识（跨厂商）
 
 ### AI General Notes
 - [概览](ai-general-notes/overview.md)
-- [Prompt Engineering](ai-general-notes/prompt-engineering.md)
+- [Prompt Engineering](ai-general-notes/prompt-engineering.md) ⭐ — 防幻觉四层机制、第一性原理、博弈论应用
 - [RAG](ai-general-notes/rag.md)
 - [Fine-tuning](ai-general-notes/fine-tuning.md)
 - [Agent](ai-general-notes/agent.md) ⭐ — Agent 本质、for循环、Model+Harness 框架
@@ -20,7 +20,7 @@
 - AI Coding: [Qoder](alibaba-cloud/ai-coding/qoder.md)
 - AI App: [QoderWork](alibaba-cloud/ai-app/qoder-work.md) | [龙虾家族（HiClaw/QwenPaw/百炼龙虾/PolarClaw/AgentBay）](alibaba-cloud/ai-app/claw-family.md) | [JVS Crew](alibaba-cloud/ai-app/jvs-crew.md)
 - AI Platform: [PAI](alibaba-cloud/ai-platform/pai.md)
-- AI Infra: [ECS GPU](alibaba-cloud/ai-infra/ecs-gpu.md) | [灵骏](alibaba-cloud/ai-infra/lingjun.md)
+- AI Infra：[ECS GPU](alibaba-cloud/ai-infra/ecs-gpu.md) | [灵骏](alibaba-cloud/ai-infra/lingjun.md) | [GPU 产品线选型](alibaba-cloud/ai-infra/gpu-product-line.md) ⭐
 
 ### AWS
 - MaaS: [Bedrock](aws/maas/overview.md) | [Claude](aws/maas/claude.md) | [Titan](aws/maas/titan.md)
@@ -46,6 +46,7 @@
 - [阿里云 vs AWS](alibaba-cloud/competitive-analysis/alibaba-vs-aws/overview.md)
 - [阿里云 vs 火山引擎](alibaba-cloud/competitive-analysis/alibaba-vs-volcengine/overview.md)
 - [Qoder vs Kiro](alibaba-cloud/competitive-analysis/qoder-vs-kiro/overview.md)
+- [Qoder vs Trae](alibaba-cloud/competitive-analysis/qoder-vs-trae/overview.md) ⭐ — 企业级 vs 个人开发者定位差异
 
 ## 体：行业解决方案
 

@@ -67,6 +67,8 @@ tools: Read, Grep, Glob, WebFetch, WebSearch, Write
 ```markdown
 ---
 # {YYYY-MM-DD} {主题}
+## 原始对话
+- 如果信息已经是处理过的相对完整数据可以元数据插入这里，再做后续类型、归档建议等补充。
 
 ## 类型
 {事实问答 / 概念洞察 / 选型分析}

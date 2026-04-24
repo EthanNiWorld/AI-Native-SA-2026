@@ -1,0 +1,14 @@
+# AI Native Expert Changelog
+
+## 2026-04-24
+### 新增要求
+- 建立变更记录维护机制，确保后续变更都需要更新此文件
+
+## 2026-04-20
+### 初始版本
+- 建立 AI Native Expert 基本工作流程
+- 定义两层回答结构：所以然（What & How）和之所以然（Why）
+- 覆盖范围：LLM、AIGC、AI Coding、平台、AI Engineering
+- 建立信源优先级体系
+- 实现知识沉淀机制，自动产出 inbox 素材
+- 定义内容分类与归档建议

@@ -6,8 +6,8 @@
 
 <!-- SUMMARY_START -->
 **一句话说明**: 让 LLM 具备自主规划、使用工具、完成复杂任务的能力；本质是一个不确定性受控的 for 循环
-**核心价值**: 从"对话助手"升级为"自主执行助手"——模型从被动回答变为主动感知、规划、行动
-**相关产品**: [HiClaw/龙虾家族](../alibaba-cloud/ai-app/claw-family.md), [JVS Crew](../alibaba-cloud/ai-app/jvs-crew.md), [Claude Managed Agents](../anthropic/ai-app/claude-managed-agents.md)
+**核心价值**: 从"对话助手"升级为"自主执行助手"——模型从被动回答变为主动感知、规划、行动；模型从产品本身转变为产品的一部分，厚软件层成为新壁垒
+**相关产品**: [HiClaw/龙虾家族](../alibaba-cloud/ai-app/claw-family.md), [JVS Crew](../alibaba-cloud/ai-app/jvs-crew.md), [Claude Managed Agents](../anthropic/ai-app/claude-managed-agents.md), [OpenAI Codex](https://openai.com/codex)
 <!-- SUMMARY_END -->
 
 ## 是什么
@@ -39,6 +39,24 @@ Agent = Model（大脑）+ Harness（缰绳+鞍具）
 
 > 模型是 commodity（越来越同质化），真正的差异化在 Harness 的设计质量。相同的模型，接不同的 Harness，出来的产品能力天差地别。
 
+### Agent 平台战略拐点（2026-04 更新）
+
+**行业趋势**：模型从"产品本身"转变为"产品的一部分"
+
+- **过去**：模型上面只有一层很薄的软件
+- **现在**：一层很厚的软件层，包括 skill、连接器、计算机操作、上下文管理、记忆
+- **比喻**：有了大脑（模型），现在在造身体。两者都很难，必须协同设计
+
+**OpenAI 三大优先级**（2026-04）：
+1. **构建极致的 Agent 平台**（第一优先级）
+2. **将 Agent 应用到所有 computer work**：从软件工程扩展到法律、金融、写作、表格、PPT等垂直行业
+3. **Personal AGI**：每人一个代表自己的 AI，拥有用户上下文，能主动行动
+
+**战略逻辑**：
+- 单模型能力已触及用户交互瓶颈
+- Agent 平台可构建生态壁垒，开发者能构建自己的 Agent
+- 小公司能获得以前不可能的收入规模，释放新一波创业浪潮
+
 ### 感知-推理-行动-观察循环
 
 | 阶段 | 含义 | 工程关键点 |
@@ -59,12 +77,14 @@ Agent = Model（大脑）+ Harness（缰绳+鞍具）
 
 ## 各厂商实现对照
 
-| 能力 | 阿里云 | Anthropic | 开源 |
-|------|--------|-----------|------|
-| 托管 Agent 平台 | [JVS Crew](../alibaba-cloud/ai-app/jvs-crew.md)、百炼龙虾 | [Claude Managed Agents](../anthropic/ai-app/claude-managed-agents.md) | OpenClaw、LangGraph |
-| 多 Agent 框架 | [HiClaw](../alibaba-cloud/ai-app/claw-family.md)（Manager-Worker） | 无内置框架 | CrewAI、AutoGen |
-| Agent 执行环境 | 无影 AgentBay（沙箱） | gVisor disposable 运行时 | Docker 自托管 |
-| 企业 SSO/RBAC | JVS Crew（含 AAD） | 暂不支持（2026-04公测版） | 需自建 |
+| 能力 | 阿里云 | Anthropic | OpenAI | 开源 |
+|------|--------|-----------|--------|------|
+| 托管 Agent 平台 | [JVS Crew](../alibaba-cloud/ai-app/jvs-crew.md)、百炼龙虾 | [Claude Managed Agents](../anthropic/ai-app/claude-managed-agents.md) | Codex Agent 平台 | OpenClaw、LangGraph |
+| 多 Agent 框架 | [HiClaw](../alibaba-cloud/ai-app/claw-family.md)（Manager-Worker） | 无内置框架 | 规划中 | CrewAI、AutoGen |
+| Agent 执行环境 | 无影 AgentBay（沙箱） | gVisor disposable 运行时 | 统一 Agent 基础设施 | Docker 自托管 |
+| 企业 SSO/RBAC | JVS Crew（含 AAD） | 暂不支持（2026-04公测版） | 支持 | 需自建 |
+| 编程 Agent | Qoder | Claude Code | Codex | Continue、Aider |
+| 垂直行业扩展 | 进行中 | 进行中 | 法律/金融/写作等 | - |
 
 ## 最佳实践
 
@@ -103,4 +123,5 @@ Agent = Model（大脑）+ Harness（缰绳+鞍具）
 ## Changelog
 | 日期 | 变更内容 |
 |------|----------|
+| 2026-04-24 | 新增：Agent平台战略拐点、OpenAI三大优先级、各厂商Agent平台对照扩展（来源：OpenAI创始人访谈） |
 | 2026-04-23 | 初始填充，基于龙虾家族对话中的第一性原理洞察：Agent for循环本质、Agent=Model+Harness、老代码三步法 |

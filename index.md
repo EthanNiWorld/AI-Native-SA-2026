@@ -6,12 +6,16 @@
 ## 道：AI 领域知识（跨厂商）
 
 ### AI General Notes
-- [概览](ai-general-notes/overview.md)
+
+**🛠️ 技术概念类**（适合关键选型维度）：
+- [Agent](ai-general-notes/agent-def.md) ⭐ — for循环本质、Model+Harness框架、Agent平台战略拐点、OpenAI三大优先级
+- [Harness](ai-general-notes/harness.md) ⭐ — 企业战略级资产、约束治理层、Harness vs Prompt区别
 - [Prompt Engineering](ai-general-notes/prompt-engineering.md) ⭐ — 防幻觉四层机制、第一性原理、博弈论应用
-- [RAG](ai-general-notes/rag.md)
-- [Fine-tuning](ai-general-notes/fine-tuning.md)
-- [Agent](ai-general-notes/agent.md) ⭐ — Agent 本质、for循环、Model+Harness 框架
-- [Harness](ai-general-notes/harness.md) ⭐ — 为什么是企业战略级资产、Harness vs Prompt 区别
+- [RAG](ai-general-notes/rag.md) — 待填充
+- [Fine-tuning](ai-general-notes/fine-tuning.md) — 待填充
+
+**💡 概念洞察类**（适合关键认知框架）：
+- [AI能力边界与迭代部署](ai-general-notes/ai-capability-and-deployment.md) ⭐ — 锯齿状能力边界、迭代部署哲学、Personal AGI终局
 
 ## 点：单产品知识
 

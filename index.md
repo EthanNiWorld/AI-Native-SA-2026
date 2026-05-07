@@ -1,7 +1,7 @@
 # 知识库全局索引
 
 > 本文件是知识库的全局索引，Skill 必读。
-> 最后更新：2026-04-24
+> 最后更新：2026-05-07
 
 ## 道：AI 领域知识（跨厂商）
 
@@ -56,6 +56,7 @@
 
 - [IPC 智能安防](solutions/vertical-ipc/overview.md)
 - [短剧出海](solutions/vertical-short-drama/overview.md)
+- [商业地产](solutions/commercial-real-estate/overview.md) — AI 应用规模化复制：AI 质检、合同审查、知识库、智能客服、Qoder 提效
 
 ## 模板参考
 

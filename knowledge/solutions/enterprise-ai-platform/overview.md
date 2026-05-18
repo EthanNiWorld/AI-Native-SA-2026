@@ -1,0 +1,221 @@
+# 企业自建 AI 推理平台解决方案
+
+> 最后更新: 2026-05-18
+> 客群标签: enterprise-ai-platform, gpu-hosting, llm-inference, aws-migration
+> 状态: Published
+
+<!-- SUMMARY_START -->
+**客群特征**: 企业级 AI 应用开发商，有大量 LLM 调用需求，追求自主可控 + 云端弹性双轨；典型场景为从 AWS 迁移至阿里云自建 GPU 推理集群。
+**核心产品组合**: 阿里云灵骏裸金属 H20 + ACK + Higress AI Gateway + 百炼 API (Fallback)
+**关键需求**: AI 网关统一入口管理、AI 全链路可观测、AI 内容合规审计、K8s 统一 GPU 算力调度、自建 GPU 与云端 API 混合推理
+<!-- SUMMARY_END -->
+
+---
+
+## 客群画像
+
+- **典型企业类型**: 拥有自建 LLM 推理需求的互联网/企业服务公司，业务涵盖 AI 咨询应用与合规审计应用
+- **业务特征**:
+  - 同时运营多个 AI 业务 App（如对话类、文档审计类），共用底层推理资源
+  - 对内容合规有强需求（全量 Prompt/Response 审计）
+  - 需要同时对接自建 GPU 推理与云端 MaaS API
+- **IT 现状与痛点**:
+  - 原基于 AWS 的 GPU 集群方案，GPU 资源与业务调度分离，各层监控散装拼凑
+  - 多业务 App 各自对接推理 Endpoint，运维复杂度高
+  - 缺乏统一 AI 网关，Fallback 策略需业务侧自行实现
+- **迁移背景**: 从 AWS H20 GPU 集群迁移至阿里云，复用灵骏裸金属 H20 算力
+- **预算规模**: 裸金属 GPU 集群（8 台 H20-3e 满配设计），配套 NAS 存储（模型 1TB + 监控 25TB）
+
+---
+
+## 核心需求分析
+
+| 需求优先级 | 需求描述 | 对应云产品/服务 |
+|-----------|----------|----------------|
+| P0 | AI 网关统一入口：一个接入点管控所有 LLM 流量，自建 GPU 与云端 API 透明切换 | Higress AI Gateway |
+| P0 | 自建 GPU 推理集群：高性能 LLM 本地推理，数据不出集群 | ACK + 灵骏裸金属 H20 + SGLang/vLLM |
+| P0 | 云端 API Fallback：自建推理不可用时自动切换，保障业务连续性 | 百炼 API |
+| P1 | AI 全链路可观测：从网关到 GPU 卡的全栈监控 | Prometheus + Grafana + DCGM Exporter + Loki |
+| P1 | AI 内容合规：全量 Prompt/Response 审计，满足监管要求 | Higress 审计日志 + Loki + NAS 持久化 |
+| P1 | K8s 统一 GPU 调度：ECS 与裸金属统一资源视图，弹性扩缩 | ACK + GPU Operator + LWS Controller |
+| P2 | 跨机高性能互联：大模型分布式推理 Tensor Parallel 通信 | RDMA RoCE + Multus CNI + Mellanox ConnectX |
+| P2 | 多业务 App 资源隔离：不同 App 不互相阻塞 | Higress 限流 / SGLang 多实例硬隔离 |
+
+---
+
+## 推荐架构方案
+
+### 三层架构设计
+
+```
+┌──────────────────────────────────────────────────────┐
+│                    客户业务层                          │
+│         ZX App (咨询类)     Audit App (审计类)        │
+└─────────────────────┬────────────────────────────────┘
+                      │ HTTPS
+┌─────────────────────▼────────────────────────────────┐
+│              Higress AI Gateway 层                    │
+│  AI 路由 │ 限流/鉴权 │ 审计日志 │ Fallback 熔断降级   │
+│             (NodePort 30080/30443)                   │
+└─────────────────────┬────────────────────────────────┘
+                      │
+         ┌────────────┴────────────┐
+         ▼                         ▼
+┌────────────────┐      ┌──────────────────────┐
+│  推理引擎层     │      │   百炼 API (Fallback) │
+│ SGLang (主力)  │      │   VPC 内访问          │
+│ vLLM (辅助)   │      └──────────────────────┘
+└────────┬───────┘
+         ▼
+┌────────────────────────────────────────┐
+│    阿里云灵骏裸金属 GPU 节点池           │
+│    H20-3e × 8卡/台，规划 8 台          │
+│    RDMA RoCE 跨机高速互联              │
+└────────────────────────────────────────┘
+```
+
+### 关键设计原则
+
+1. **统一网关**：所有 LLM 请求经 Higress 管控，业务 App 无需感知后端推理引擎变更
+2. **混合推理双轨**：自建 GPU 主力 + 百炼 API Fallback，Higress 健康检查自动熔断切换
+3. **全链路可观测**：网关→推理引擎→GPU 卡级指标一体化，不散装拼凑
+4. **内容合规**：全量 Prompt/Response 审计，NAS 持久化，满足国内监管要求
+5. **高性能互联**：RDMA RoCE 保障跨机 Tensor Parallel 性能（按需启用）
+
+### 节点规划
+
+| 角色 | 节点形态 | 数量 | 用途 |
+|------|---------|------|------|
+| Control Plane | ECS | 3 | K8s 管理面 HA |
+| 业务节点 | ECS | 2 | Higress 网关 + 监控组件 |
+| GPU 推理节点 | 灵骏裸金属 H20-3e | 8（设计）| LLM 推理计算 |
+
+> 分批纳管策略：先接入 2 台验证，按业务量分批扩至 8 台满配
+
+### TP 策略建议
+
+| 模型规模 | 推荐策略 | 原因 |
+|---------|---------|------|
+| ≤ 72B | 单机 TP=8 | H20 单机 1,128GB 显存完全覆盖，避免跨机通信开销 |
+| 72B ~ 200B | 单机 TP=8 + 多副本 DP | ROI 优于跨机 TP |
+| > 200B 或追求极低 TTFT | 跨机 TP（LWS + RDMA） | 才有必要启用 RDMA 跨机通信 |
+
+---
+
+## 产品组合推荐
+
+| 层级 | 推荐产品 | 规格建议 |
+|------|----------|----------|
+| AI 网关层 | Higress AI Gateway | v2.1.9+，Helm 部署，2-3 副本 HA，挂载 SLB/ALB |
+| GPU 计算层 | 阿里云灵骏裸金属 H20-3e | 8 卡/台，141GB HBM3，分批纳管 |
+| 推理框架 | SGLang（主）/ vLLM（辅）| Ubuntu 24.04 + CUDA 13.0 + SGLang latest |
+| K8s 编排 | ACK 托管版 | v1.34.6+，含 GPU Operator + LWS Controller |
+| 跨机互联 | RDMA RoCE + Multus CNI | Mellanox ConnectX NIC，macvlan 模式 |
+| 云端 Fallback | 百炼 API | VPC Endpoint 内网访问，按需付费 |
+| 缓存层 | Redis Stack Server | Higress 已内置，可扩展为 Prompt 语义缓存 |
+| 存储层 | 阿里云 NAS | 模型文件（RWX 静态 PV）+ 监控日志（动态供给） |
+| 可观测 | Prometheus + Grafana + DCGM Exporter + Loki | 集群级 + Higress 自带，建议收敛为一套 |
+
+---
+
+## 竞品方案对比（vs 原 AWS 方案）
+
+| 能力层 | 阿里云方案优势 | AWS 原方案局限 |
+|--------|--------------|--------------|
+| **AI 网关统一入口** | Higress 一个入口管控所有 LLM 流量，自建 GPU 与 API 透明切换；AI 路由 + 熔断降级 + 灰度发布一体化 | 业务侧自行对接多个推理 Endpoint，运维复杂度高 |
+| **AI 可观测** | 从网关到 GPU 卡全链路一体化监控（Token 统计、延迟/吞吐、GPU 利用率/温度） | 各层监控散装拼凑，难以形成全链路视图 |
+| **AI 内容合规** | 全量 Prompt/Response 持久化审计，满足国内监管；按 App 维度访问控制 | 合规审计需额外开发，难以满足国内监管要求 |
+| **K8s 统一 GPU 调度** | ACK 一套集群统一纳管 ECS + 灵骏裸金属 + 百炼 API | GPU 与业务调度分离，资源视图割裂 |
+| **混合推理双轨** | 自建 GPU + 百炼 Fallback，健康检查自动熔断，高可用兜底 | Fallback 逻辑需业务侧自行实现 |
+| **灵骏 AI 扩展内核** | kernel 6.8.0-aiext，针对 AI 工作负载优化 | 通用 kernel，无 AI 专项优化 |
+
+---
+
+## 标杆案例
+
+### 某 ZX 企业客户（2026 年 5 月）
+
+**背景**: 某500强企业，从 AWS H20 GPU 集群迁移至阿里云，运营 ZX App（AI 咨询类）和 Audit App（文档审计类）两条业务线。
+
+**架构实施**:
+- ACK 集群：3 Master + 4 Worker（ECS）+ 2 灵骏裸金属 GPU 节点（设计 8 台）
+- Higress v2.1.9：AI 网关已部署，路由配置进行中
+- GPU 栈：GPU Operator + DCGM + LWS Controller + RDMA Shared DP 全栈就绪
+- 可观测：Prometheus（HA 双副本）+ DCGM Exporter + Loki（10TB）全链路覆盖
+- 存储：模型文件 1TB（NAS RWX）+ Grafana 5TB + Loki/Prometheus 各 10TB
+
+**当前实施进度**:
+- ✅ 已完成：集群搭建、GPU 节点接入（2/8）、Higress 全组件部署、监控体系
+- 🔄 进行中：SGLang 推理服务部署、Higress AI 路由配置
+- 📋 规划中：剩余 6 台 GPU 节点纳管、百炼 API Fallback 接入、HPA 弹性伸缩
+
+**关键优化项（⚠️ 待处理）**:
+- Higress Gateway 当前 1 副本，需扩至 2-3 副本 + 反亲和
+- 百炼 Fallback 触发条件需明确（健康检查超时 N 次 / 队列深度超阈值 / 错误率熔断）
+- DCGM Exporter DaemonSet AVAILABLE=0，疑似 readiness probe 配置问题
+
+---
+
+## 方案优化建议（通用）
+
+### 高优先级
+
+| # | 建议 | 说明 |
+|---|------|------|
+| 1 | Higress Gateway HA | 1 副本是单点故障，扩至 2-3 副本 + 反亲和 + SLB 四层负载 |
+| 2 | Fallback 明确触发条件 | 健康检查 + 限流降级 + 熔断保护三档配置，否则"双轨"实为冷备 |
+| 3 | 灵骏 + Ubuntu 兼容性 | MOFED 版本与 aiext kernel 需锁版本；NCCL_IB_HCA 等参数需显式配置 |
+| 4 | 跨机 TP 必要性评估 | H20 单机 1,128GB，≤72B 模型无需跨机；多副本 DP 通常 ROI 更高 |
+
+### 中优先级
+
+| # | 建议 | 说明 |
+|---|------|------|
+| 5 | 两套 Prometheus 收敛 | Higress 自带 Prometheus 改走 ServiceMonitor，统一为集群级一套 |
+| 6 | Prompt 缓存层 | Higress 已有 Redis，审计类重复 prompt 场景可节省 30-50% Token |
+| 7 | 多 App 资源隔离 | 早期软隔离（Higress 限流配额），业务量大后考虑 SGLang 硬隔离 |
+| 8 | 审计日志容量规划 | 全量存储约每月几百 GB，需明确合规要求是全量还是元数据+异常全量 |
+
+### 低优先级
+
+| # | 建议 | 说明 |
+|---|------|------|
+| 9 | GPU 成本归集 | DCGM + 业务 label，可算出单次会话 GPU 成本，对接业务定价 |
+| 10 | 灰度发布机制 | Higress 按权重灰度，预留标准 SOP：5% → 观察 30min → 全量 |
+| 11 | RDMA DP nodeSelector | 当前 4 Pod 包含 ECS 节点，浪费资源，应仅调度到 GPU 节点 |
+
+---
+
+## 销售策略
+
+- **关键决策人**: CTO / 技术负责人（关注推理性能、成本）+ 合规负责人（关注审计）
+- **切入时机**:
+  - AWS → 阿里云迁移窗口（已在迁移中，技术选型已做）
+  - 推理成本压力（自建 GPU 比 MaaS API 在高频场景下成本更低）
+  - 国内监管合规压力（内容审计、数据不出国）
+- **POC 建议方案**:
+  1. 用 1 台灵骏裸金属验证 SGLang 推理性能（对比原 AWS 方案）
+  2. 部署 Higress + 百炼 API，演示 Fallback 自动切换
+  3. 对接 DCGM Exporter，展示 GPU 卡级可观测大盘
+- **差异化卖点**:
+  - 灵骏 AI 扩展内核（6.8.0-aiext）针对 H20 优化，推理性能领先通用 kernel
+  - Higress 是阿里云开源 AI 网关，原生集成百炼 API，竞品无此生态闭环
+  - ACK + 灵骏 + 百炼 一套云产品统一管理，AWS 方案难以复制
+
+---
+
+## 参考资料
+
+- Higress AI Gateway: https://higress.io
+- SGLang: https://github.com/sgl-project/sglang
+- LWS (LeaderWorkerSet): https://github.com/kubernetes-sigs/lws
+- NVIDIA GPU Operator: https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/
+- 阿里云灵骏产品: https://www.aliyun.com/product/lingjun [⚠️ 待验证 URL]
+
+---
+
+## Changelog
+
+| 日期 | 变更内容 |
+|------|----------|
+| 2026-05-18 | 新建：基于某 ZX 企业客户实战案例提炼，含架构设计、产品组合、优化建议 |

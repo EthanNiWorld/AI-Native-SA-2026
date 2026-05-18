@@ -1,6 +1,6 @@
 ---
 name: ai-knowledge-miner
-description: 将 inbox/ 原始素材提炼为脱敏、结构化的知识文档，写入 knowledge/ 对应目录。当用户提到"提炼"、"沉淀"、"处理 inbox"、"knowledge miner"时自动适用。
+description: 将 inbox/ 原始素材或 notes/ 长期笔记提炼为脱敏、结构化的知识文档，写入 knowledge/ 对应目录。当用户提到"提炼"、"沉淀"、"处理 inbox"、"处理 notes"、"knowledge miner"时自动适用。
 tools: Read, Grep, Glob, Write, Bash
 ---
 
@@ -14,8 +14,18 @@ tools: Read, Grep, Glob, Write, Bash
 
 ### Step 1 — 读取素材
 
-- 读取用户指定的 inbox/ 文件（路径：`~/Documents/ai-knowledge-base/inbox/`）
-- 如未指定，列出 inbox/ 下所有 `.md` 文件供用户选择
+- 识别素材来源：
+  - **`inbox/` 素材**：一次性原始素材，处理完归档到 `archive/`
+  - **`notes/` 笔记**：长期维护的个人笔记（如 Daily note），处理完**保留原文件**
+- 如未指定，列出 `inbox/` 和 `notes/` 下所有 `.md` 文件供用户选择
+- 读取用户指定的文件内容
+
+### Step 1.5 — 确认提炼范围（仅 notes/ 需要）
+
+如果素材来源是 `notes/`：
+- 分析文档中的日期/章节节点
+- 询问用户提炼哪部分内容（如"最近一周"、"2025-05-14 及之后"）
+- 仅提取指定范围的内容进入后续流程
 
 ### Step 2 — 识别分类与智能合并检测
 
@@ -103,7 +113,9 @@ tools: Read, Grep, Glob, Write, Bash
 
 3. 如果内容已经存在，需要追加到合适位置，增量迭代，覆盖、删除原有内容需要与用户确认
 
-4. 将已处理的 inbox 文件移至 `archive/`
+4. **归档策略**：
+   - `inbox/` 文件 → 移至 `archive/`
+   - `notes/` 文件 → **保留原文件**，仅提取内容
 
 ## 读取策略（严格遵守，控制 Token）
 
@@ -136,7 +148,7 @@ tools: Read, Grep, Glob, Write, Bash
 
 ## 边界
 
-- 不联网搜索，只基于 inbox 素材提炼
+- 不联网搜索，只基于 `inbox/` 和 `notes/`下 素材提炼
 - 不编造数据，素材中没有的留空或标注 `[⚠️ 待补充]`
-- 不处理非 inbox/ 的文件
+- 只处理 `inbox/` 和 `notes/` 目录下的文件，其他目录的文件需用户明确授权
 - 所有输出到 knowledge/ 的内容必须已脱敏

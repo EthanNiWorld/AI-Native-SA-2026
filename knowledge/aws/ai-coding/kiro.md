@@ -6,3 +6,4 @@
 > 状态: Draft
 
 **定位**: AWS AI-native IDE
+**官网**:：https://aws.amazon.com/cn/campaigns/kiro/?

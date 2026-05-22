@@ -1,7 +1,7 @@
 # 知识库全局索引
 
 > 本文件是知识库的全局索引，Skill 必读。
-> 最后更新：2026-05-22
+> 最后更新：2026-05-22（新增 MiniMax / 智谱 公司分析报告）
 
 ## 道：AI 领域知识（跨厂商）
 
@@ -44,6 +44,12 @@
 - MaaS: [Claude API](anthropic/maas/claude-api.md)（Opus / Sonnet / Haiku）
 - AI Coding: [Claude Code](anthropic/ai-coding/claude-code.md)
 - AI App: [Claude Teams](anthropic/ai-app/claude-teams.md) | [Claude Managed Agents](anthropic/ai-app/claude-managed-agents.md)
+
+### MiniMax
+- 公司分析: [MiniMax 公司分析报告](minimax/general_intro.md) — 2026.01 港股 IPO（00100.HK）、海螺 AI / Talkie 全球化、MiniMax-M1/M2 开源混合注意力
+
+### 智谱 AI（Zhipu）
+- 公司分析: [智谱 AI 公司分析报告](zhipu/general_intro.md) — 2026.01 港股 IPO（02513.HK，全球大模型第一股）、GLM-5 编程开源 SOTA、MaaS ARR 17 亿元
 
 ## 线：对比分析（阿里云视角）
 

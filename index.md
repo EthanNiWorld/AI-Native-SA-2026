@@ -1,7 +1,7 @@
 # 知识库全局索引
 
 > 本文件是知识库的全局索引，Skill 必读。
-> 最后更新：2026-05-18
+> 最后更新：2026-05-22
 
 ## 道：AI 领域知识（跨厂商）
 
@@ -9,7 +9,7 @@
 
 **🛠️ 技术概念类**（适合关键选型维度）：
 - [Agent](ai-general-notes/agent-def.md) ⭐ — for循环本质、Model+Harness框架、Agent平台战略拐点、OpenAI三大优先级
-- [Harness](ai-general-notes/harness.md) ⭐ — 企业战略级资产、约束治理层、Harness vs Prompt区别
+- [Harness](ai-general-notes/harness.md) ⭐ — 企业战略级资产、约束治理层、Harness vs Prompt区别、调用层容量与限流治理（多账号扩 TPM、客户端拥塞拐点）
 - [Prompt Engineering](ai-general-notes/prompt-engineering.md) ⭐ — 防幻觉四层机制、第一性原理、博弈论应用
 - [RAG](ai-general-notes/rag.md) — 待填充
 - [Fine-tuning](ai-general-notes/fine-tuning.md) — 待填充
@@ -20,7 +20,7 @@
 ## 点：单产品知识
 
 ### 阿里云
-- MaaS: [百炼平台](alibaba-cloud/maas/overview.md) | [Qwen](alibaba-cloud/maas/qwen.md) | [万相](alibaba-cloud/maas/wan.md) | [Qwen3.6](alibaba-cloud/maas/qwen3.6.md)
+- MaaS: [百炼平台](alibaba-cloud/maas/overview.md) — UID 级限流机制、多账号扩 TPM 方案（8.5× 实测验证）、deepseek-v4-flash 压测踩坑 | [Qwen](alibaba-cloud/maas/qwen.md) | [万相](alibaba-cloud/maas/wan.md) | [Qwen3.6](alibaba-cloud/maas/qwen3.6.md)
 - AI Coding: [Qoder](alibaba-cloud/ai-coding/qoder.md)
 - AI App: [QoderWork](alibaba-cloud/ai-app/qoder-work.md) | [龙虾家族（HiClaw/QwenPaw/百炼龙虾/PolarClaw/AgentBay）](alibaba-cloud/ai-app/claw-family.md) | [JVS Crew](alibaba-cloud/ai-app/jvs-crew.md)
 - AI Platform: [PAI](alibaba-cloud/ai-platform/pai.md)

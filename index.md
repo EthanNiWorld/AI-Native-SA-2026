@@ -1,7 +1,7 @@
 # 知识库全局索引
 
 > 本文件是知识库的全局索引，Skill 必读。
-> 最后更新：2026-05-22（新增 MiniMax / 智谱 公司分析报告）
+> 最后更新：2026-05-22（新增 MiniMax / 智谱 / DeepSeek 公司分析报告）
 
 ## 道：AI 领域知识（跨厂商）
 
@@ -50,6 +50,9 @@
 
 ### 智谱 AI（Zhipu）
 - 公司分析: [智谱 AI 公司分析报告](zhipu/general_intro.md) — 2026.01 港股 IPO（02513.HK，全球大模型第一股）、GLM-5 编程开源 SOTA、MaaS ARR 17 亿元
+
+### DeepSeek（深度求索）
+- 公司分析: [DeepSeek 公司分析报告](deepseek/general_intro.md) ⭐ — MLA+MoE 架构创新、R1 纯 RL 推理、V4 开源 SOTA、557万美元训练成本、“DeepSeek 时刻”
 
 ## 线：对比分析（阿里云视角）
 

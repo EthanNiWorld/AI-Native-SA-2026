@@ -1,8 +1,136 @@
 # Qoder
 
-> 最后更新: 2026-04-20
-> 所属厂商: 阿里云
+> 最后更新: 2026-05-26
+> 所属厂商: Alibaba (Alibaba Cloud)
 > 产品类别: AI Coding
-> 状态: Draft
+> 状态: Published
 
-**定位**: AI 编程助手，提升开发者编码效率
+<!-- SUMMARY_START -->
+**定位**: 智能体编程平台（Agentic Coding Platform），面向真实软件开发场景，10倍研发提效  
+**适用**: 研发团队、企业组织，需要统一 AI 编程工具链、沉淀团队知识、集中管控  
+**不适用**: 仅需简单代码补全的个人用户（可用社区免费版）  
+**竞品**: Kiro (AWS), Cursor, GitHub Copilot, Trae (ByteDance)  
+**常搭配**: 百炼平台（MaaS）、阿里云开发者生态  
+<!-- SUMMARY_END -->
+
+## 产品原理解析
+
+### 一句话定位
+
+面向真实软件的智能体编程平台，支持全球 SOTA 及亚太 SOTA 模型智能调度，实现从辅助编程到完全自主编程的全谱系开发体验。
+
+### 4 大核心模式
+
+| 模式 | 功能 | 场景 |
+|------|------|------|
+| **NEXT** | 智能代码补全与行间建议预测 | 日常编码提效 |
+| **Agentic Chat** | 对话式智能体协同，自动理解意图、拆解任务 | 规划、编码与交付协同 |
+| **Quest** | 自主智能体，端到端独立完成任务 | 复杂、长周期开发任务 |
+| **RepoWiki** | 团队知识引擎，从代码和对话中沉淀知识 | 代码库文档化与架构理解 |
+
+### 产品形态
+
+| 形态 | 说明 |
+|------|------|
+| Qoder IDE | 原生 AI IDE 开发环境 |
+| JetBrains 插件 | 适配 IntelliJ IDEA 等 JetBrains 全系 IDE |
+| Qoder CLI | 终端原生工作形态 |
+
+### 核心能力特性
+
+- 全球 SOTA + 亚太 SOTA 模型智能调度，兼顾性能与成本
+- 特训智能体大模型，对话次数提升 4 倍
+- 工程知识引擎系统（记忆 + 全量实时代码检索）
+- MCP 生态集成，灵活拓展功能
+
+### 核心限制
+
+| 限制项 | 具体值 | 说明 |
+|--------|--------|------|
+| 席位 Credits | 3,000/席位/月 | 固定额度，不可席位间共享，月末清零 |
+| 共享资源包有效期 | 3 个月 | 到期清零，不可转让 |
+| 购买渠道 | 阿里云国际云市场 | 兑换码模式，购买后不可退款 |
+
+## 计费模式
+
+### 设计逻辑（Why Credits）
+
+Qoder 采用 Credit 计量制而非纯席位订阅，背后逻辑：
+1. AI 编程“消费量”在开发者间差异巨大（轻度补全 vs 重度 Agent），按量计费覆盖更广场景
+2. Credits 机制将不同模型的消耗统一度量，简化多模型定价复杂度
+3. Teams 版设计为“人头费 + 按需补充”双层结构，反映企业采购典型诉求
+
+### Teams 版方案
+
+| 项目 | 详情 |
+|------|------|
+| 席位价格 | $40/席位/月 |
+| 席位额度 | 3,000 Credits/席位/月（固定，不可共享，月末清零） |
+| 组织共享资源包 | $40/2,000 Credits（组织内全员共享，有效期 3 个月） |
+| 消耗优先级 | 席位额度 → 个人资源包 → 组织共享资源包 |
+| 企业功能 | 集中计费、管理员控制台、SSO、域限制、RBAC |
+
+### 购买渠道（以云市场为准）
+
+| 产品 | 云市场链接 |
+|------|------------|
+| Teams 席位 | https://marketplace.alibabacloud.com/products/201076001/sgcmgj00036615.html |
+| 组织共享资源包 | https://marketplace.alibabacloud.com/products/201076001/sgcmgj00036655.html |
+
+### 开通流程
+
+1. 注册 qoder.com 账号，创建组织并获取组织 ID
+2. 前往云市场下单（填写组织 ID）
+3. 收到兑换码后在 Qoder 后台激活 — [Redemption Guide](https://docs.qoder.com/zh/account/teams/about-redeem)
+
+## 适用边界分析
+
+### ✅ 适用场景
+
+| 场景 | 说明 | 典型客户 |
+|------|------|----------|
+| 团队统一 AI 编程工具 | 集中管理、知识沉淀、新人快速上手 | 中大型研发团队 |
+| 复杂任务自动化 | Quest 自主智能体端到端完成 | 技术领导者 |
+| 跨区域企业部署 | SSO + 域限制 + 集中计费 | 跨国/跨地域组织 |
+
+### ❌ 不适用场景
+
+| 场景 | 不适用原因 | 替代方案 |
+|------|-----------|----------|
+| 仅需基础补全的个人用户 | 社区版已满足，无需付费 | 社区版（免费） |
+| 纯私有化部署需求 | 当前为 SaaS 模式 | 企业版（待发布） |
+
+## 安全与合规
+
+| 安全能力 | 说明 |
+|----------|------|
+| 数据加密 | 传输与存储全程加密，代码数据不用于模型训练 |
+| 数据隐私模式 | 管理员可统一设置团队隐私策略 |
+| SSO & RBAC | 支持 SAML 2.0 / OIDC 单点登录，基于角色的访问权限控制 |
+| 基础设施 | 阿里云全球基础设施，通过 ISO 27001 / SOC 2 等认证 |
+| 隐私政策 | https://qoder.com/privacy-policy |
+
+## 竞品快速对照
+
+| 维度 | Qoder | Kiro (AWS) | Cursor |
+|------|-------|-----------|--------|
+| 定位 | 智能体编程平台 | Spec-driven AI IDE | AI Code Editor |
+| 模型策略 | 全球+亚太 SOTA 智能调度 | Claude 单模型 | 多模型可选 |
+| 团队功能 | Teams版 SSO/RBAC/集中计费 | [⚠️ 待验证] | Teams版 |
+| 知识引擎 | RepoWiki + Memory | Steering [⚠️ 待验证] | - |
+
+## 参考资料
+
+- 官网: https://qoder.com
+- 文档: https://docs.qoder.com
+- 价格说明: https://docs.qoder.com/zh/account/pricing
+- Teams 价格: https://docs.qoder.com/zh/account/teams/teams-pricing
+- 计费调整公告: https://docs.qoder.com/zh/events/pricing-adjustment-notice
+- 兑换码说明: https://docs.qoder.com/zh/account/teams/about-redeem
+- 企业版: https://qoder.com/zh/enterprise
+
+## Changelog
+| 日期 | 变更内容 |
+|------|----------|
+| 2026-04-20 | 初始创建（Draft） |
+| 2026-05-26 | 合并：inbox/ai-knowledge-by-qoder-ai-native-agent-20260526.md - 完善产品定位、4大核心模式、计费模式、安全合规、竞品对照 |

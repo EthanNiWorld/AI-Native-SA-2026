@@ -232,6 +232,46 @@ DeepSeek（全称：杭州深度求索人工智能基础技术研究有限公司
 4. **融资后的独立性**：梁文锋承诺"不改变方向"，但资本注入后能否保持"纯研究"文化存疑
 5. **竞争白热化**：Qwen、GLM-5、MiniMax-M3 等国产同业持续逼近，国际上 Claude/GPT 仍是标杆
 
+### 9.3 V4 vs V3.2：Agent 场景的选型差异
+
+V4 不是 V3.2 的常规升级，而是针对 Agent 长链路工作流的**定向修复**。在 AI Coding / 多 Agent 协作场景下，V4 的优势具有结构性意义。
+
+**官方明确点名的 Agent 集成**（来自 DeepSeek 官方发布页[reference:28]）：
+> *"DeepSeek-V4 is seamlessly integrated with leading AI agents like Claude Code, OpenClaw & OpenCode."*
+
+**V3.2 在 Agent 场景的具体缺陷**（来自 HuggingFace 技术分析[reference:29]）：
+> V3.2 在多轮工具调用中保留推理痕迹，但**遇到新的 user message 时会清空**。多轮 Agent 工作流中模型会丢失累积推理状态，必须从头重建。
+
+**V4 三项 Agent 专项设计（针对已知失败模式的定向修复）**：
+
+| 修复点 | V3.2 问题 | V4 方案 |
+|------|------|------|
+| 跨 turn 推理保留 | 新 user message 清空推理记录 | 含工具调用的对话中跨 user turn 保留完整推理链 |
+| 工具调用格式 | JSON-in-string，嵌套转义易失败 | `\|DSML\|` 特殊 token + XML schema，区分 string / 结构化参数 |
+| Agent 训练范式 | 合成数据为主 | DSec RL 沙盒（Rust + Firecracker），真实工具环境强化学习 |
+
+**1M 上下文的计算效率（V4-Pro vs V3.2，相同硬件）**：
+
+| 指标 | V3.2 | V4-Pro |
+|------|:---:|:---:|
+| 1M tokens 单 token 推理 FLOPs | 100% | **27%** |
+| KV Cache 内存占用 | 100% | **10%** |
+
+意义：1M 上下文不是"堆容量"，而是以更低成本跑更长 Agent 链路（每轮工具调用 I/O 都追加到上下文）。
+
+**Agent Benchmark（V4-Pro-Max，来自 V4 技术报告）**：
+
+| Benchmark | V4-Pro-Max | Claude Sonnet 4.5 | Claude Opus 4.6-Max |
+|-----------|:---:|:---:|:---:|
+| SWE Verified | 80.6 | — | 80.8 |
+| MCPAtlas Public | 73.6 | — | 73.8 |
+| Terminal Bench 2.0 | 67.9 | — | — |
+| 内部 R&D Coding（PyTorch/CUDA/Rust/C++）| 67% | 47% | 70% |
+
+**选型结论**：
+- **AI Coding / 多 Agent 协作 / OpenClaw 生态等 Agent 场景** → 选 V4（V3.2 在跨 user turn 推理上有架构性硬伤）
+- **纯对话 / 短链路 RAG / 一次性指令任务** → V3.2 仍可用，且推理成本更低
+
 ---
 
 ## 十、数据使用建议
@@ -311,7 +351,13 @@ DeepSeek 的研究主线为 **"架构创新 → 效率革命 → 推理能力涌
 
 ---
 
-*最后更新：2026 年 5 月 22 日 | 基于公开报道与技术报告整理*
+*最后更新：2026 年 5 月 27 日 | 基于公开报道与技术报告整理*
+
+## Changelog
+| 日期 | 变更内容 |
+|------|----------|
+| 2026-05-22 | 初始创建，新增 DeepSeek 公司分析报告 |
+| 2026-05-27 | 合并 ai-native-expert 沉淀：新增 9.3「V4 vs V3.2 Agent 场景选型差异」，含 OpenClaw 集成、跨 turn 推理修复、DSML 工具调用格式、Agent benchmark；新增 reference 28-29 |
 
 ## 参考来源
 
@@ -343,3 +389,5 @@ DeepSeek 的研究主线为 **"架构创新 → 效率革命 → 推理能力涌
 - [reference:25] 36 氪 / 知乎 — DeepSeekMoE 技术解读
 - [reference:26] 钛媒体 / 《自然》— "又一个 DeepSeek 时刻"
 - [reference:27] 超智咨询 — "迫使全球重新评估 AI 必须依赖美国顶级算力"
+- [reference:28] DeepSeek 官方发布页 — V4 与 Claude Code / OpenClaw / OpenCode 集成（https://api-docs.deepseek.com/news/news260424）
+- [reference:29] HuggingFace 官方博客 — DeepSeek-V4: a million-token context that agents can actually use（https://huggingface.co/blog/deepseekv4）

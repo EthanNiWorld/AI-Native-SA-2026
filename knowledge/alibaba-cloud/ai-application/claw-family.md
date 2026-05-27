@@ -1,6 +1,6 @@
 # 阿里云"龙虾家族" AI Agent 产品全景
 
-> 最后更新: 2026-04-23
+> 最后更新: 2026-05-27
 > 所属厂商: 阿里云
 > 产品类别: AI App
 > 状态: Published
@@ -10,7 +10,7 @@
 **适用**: 企业级 AI Agent 构建、多 Agent 协作、数据库 AI 操作、Agent 云端执行环境
 **不适用**: 纯模型推理（无 Agent 编排需求）、对 OpenClaw 无依赖的自研 Agent 框架
 **竞品**: Claude Managed Agents（Anthropic）、Copilot Studio（Microsoft）
-**常搭配**: 百炼大模型（qwen3.6-plus）、无影 AgentBay、钉钉/飞书
+**常搭配**: 百炼大模型（qwen3.6-plus / DeepSeek-V4）、无影 AgentBay、钉钉/飞书
 <!-- SUMMARY_END -->
 
 ## 产品清单
@@ -119,6 +119,45 @@
 | "QwenClaw" 是独立产品 | QwenClaw 不是官方产品名，是社区俗称 |
 | HiClaw 是火山引擎产品 | HiClaw 是阿里 Higress 团队开源项目 |
 
+## 底座模型选型建议
+
+龙虾家族默认搭配百炼 qwen3.6-plus，但在**多 Agent 协作 / 复杂 Agentic Coding** 场景下，DeepSeek-V4 是值得评估的另一个选项。
+
+### DeepSeek V4 作为底座的依据
+
+DeepSeek 官方发布页明确点名 OpenClaw 集成：
+
+> *"DeepSeek-V4 is seamlessly integrated with leading AI agents like Claude Code, **OpenClaw** & OpenCode."*  
+> — https://api-docs.deepseek.com/news/news260424
+
+这意味着 V4 在设计阶段就以 OpenClaw 为集成目标，并非事后适配。
+
+### V4 vs V3.2：龙虾场景下的关键差异
+
+| 能力项 | V3.2 | V4-Pro | 对龙虾场景的意义 |
+|------|:---:|:---:|------|
+| 跨 user turn 推理保留 | ✘ 新 user message 清空 | ✔ 含工具调用场景保留 | HiClaw Manager-Worker 多轮调度不丢失状态 |
+| 工具调用格式 | JSON-in-string | `\|DSML\|` + XML schema | OpenClaw Skills function call 解析错误率下降 |
+| 1M 上下文 FLOPs | 100% 基准 | 27% | 长 Agent 链路推理成本下降 |
+| KV Cache | 100% 基准 | 10% | 多 Agent 并发记忆压力减小 |
+| Agentic Coding（SWE Verified）| 未专项标注 | 80.6（近 Opus 4.6-Max 80.8）| PolarClaw SQL 生成 / 代码调优任务准确率提升 |
+
+### 各产品底座选型建议
+
+| 龙虾产品 | 场景特征 | 底座选型建议 |
+|------|------|------|
+| **HiClaw**（Manager-Worker 多 Agent）| 多轮任务拆解 + 跨并发 worker 调度，跨 turn 推理要求高 | 优先 V4；V3.2 仅适合单轮任务 |
+| **百炼龙虾**（OpenClaw 原版托管）| 官方金标准集成路径 | V4 官方点名 OpenClaw，默认选 V4 |
+| **PolarClaw**（数据库 + 通用 AI 助理）| SQL 生成 / 调优是 Agentic Coding 子集 | V4-Pro（SWE Verified 80.6，内部 R&D Coding 67% > Sonnet 4.5 的 47%）|
+| **QwenPaw**（150MB 超轻量）| 个人设备低资源场景 | 与底座模型解耦，调用远端 API；V4-Flash 更经济 |
+| **无影 AgentBay**（基础设施层）| 仅提供运行环境 | 与底座模型选型无关 |
+
+### 未解决问题
+
+- **百炼上架状态**：DeepSeek-V4 是否已在百炼平台上架、可否作为龙虾家族底座切换 — 待查 [⚠️ 待验证]
+- **Function call 格式兼容性**：OpenClaw Skills 默认 JSON 格式与 V4 DSML XML 格式的适配层实现 — 待查 [⚠️ 待验证]
+- **许可与计费路径**：V4 在龙虾产品中是合同内额度调用还是需要额外计费 — 待查 [⚠️ 待验证]
+
 ## 参考资料
 
 - [阿里云 HiClaw 文档](https://help.aliyun.com/zh/model-studio/hiclaw)
@@ -129,8 +168,11 @@
 - [PolarClaw 文档](https://help.aliyun.com/zh/polardb/polardb-for-mysql/polarclaw/)
 - [无影 AgentBay 产品页](https://www.aliyun.com/product/agentbay)
 - [无影 AgentBay 安全白皮书](https://help.aliyun.com/zh/agentbay/agentbay-security-white-paper)
+- [DeepSeek-V4 官方发布页](https://api-docs.deepseek.com/news/news260424) — V4 与 OpenClaw 集成说明
+- [HuggingFace DeepSeek-V4 技术分析](https://huggingface.co/blog/deepseekv4) — V3.2 跨 turn 推理缺陷与 V4 修复
 
 ## Changelog
 | 日期 | 变更内容 |
 |------|----------|
 | 2026-04-23 | 初始创建，基于 龙虾家族产品分析对话记录（2026-04-23） |
+| 2026-05-27 | 合并 ai-native-expert 沉淀：新增「底座模型选型建议」章节，含 DeepSeek V4 vs V3.2 在龙虾场景下的关键差异与各产品选型推荐 |

@@ -30,7 +30,19 @@ tools: Read, Grep, Glob, WebFetch, WebSearch, Write
 2. **独立权威评测**：artificialanalysis.ai、LMSYS Chatbot Arena、Hugging Face 排行榜
 3. **学术论文 / 技术报告**：arXiv、官方技术白皮书
 4. **知名媒体报道**：InfoQ、The Verge、TechCrunch（需交叉验证）
-5. **知识库已有内容**（`knowledge/`）：先查后补，不重复劳动
+5. **知识库已有内容**（`knowledge/`）：仅作为主题定位、概念框架复用、项目历史上下文，**不能作为事实结论的唯一来源**
+
+### 信源最低标准（强约束）
+
+以下问题类型，**必须至少有一个优先级 1-3 的来源**才能交付，禁止仅凭知识库（优先级 5）回答：
+
+- 具体模型版本能力对比（如 V4 vs V3.2、Qwen3-Max vs Qwen3.6-Max）
+- Benchmark 分数、SOTA 声明、能力排名
+- 产品集成关系 / 兼容性事实（如"X 是否支持 Y"）
+- 发布时间、API 价格、上下文窗口、参数规模等可量化事实
+- 用户问"为什么 A 比 B 适合 X 场景"的对比类问题
+
+豁免条件：用户明确说"基于现有知识库回答"或"不用联网"。
 
 ## 行为准则
 
@@ -51,6 +63,11 @@ tools: Read, Grep, Glob, WebFetch, WebSearch, Write
 **文件命名规范**：`inbox/ai-knowledge-by-qoder-ai-native-agent-YYYYMMDD.md`
 - 当天文件已存在则追加，用 `---` 分隔条目
 - 当天不存在则新建
+
+**同一问题多次回答的处理**：
+- 同一问题的补充/修正回答（如联网核实补强）→ **覆盖原条目**而非追加，避免给 ai-knowledge-miner 增加去重负担
+- 在条目末尾追加更新轨迹：`> 📝 YYYY-MM-DD HH:MM 联网核实补强 / 数据修正 / 角度补充`
+- 仅当问题角度发生本质变化时才新建独立条目
 
 **内容分类与归档建议**：
 

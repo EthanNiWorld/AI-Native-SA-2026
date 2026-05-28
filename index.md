@@ -16,6 +16,7 @@
 
 **💡 概念洞察类**（适合关键认知框架）：
 - [AI能力边界与迭代部署](ai-general-notes/ai-capability-and-deployment.md) ⭐ — 锯齿状能力边界、迭代部署哲学、Personal AGI终局
+- [模型自我进化](ai-general-notes/agent-self-evolution.md) ⭐ — 模型自驱动训练、打破人工瓶颈、100+轮自主迭代带来30%效果提升
 
 ## 点：单产品知识
 
@@ -41,18 +42,25 @@
 - AI Infra: [TPU](gcp/ai-infra/tpu.md)
 
 ### Anthropic
-- MaaS: [Claude API](anthropic/maas/claude-api.md)（Opus / Sonnet / Haiku）
+- MaaS: [Claude API](anthropic/maas/claude-api.md)（Opus 4.7 / Sonnet 4.6 / Haiku 4）
 - AI Coding: [Claude Code](anthropic/ai-coding/claude-code.md)
 - AI App: [Claude Teams](anthropic/ai-application/claude-teams.md) | [Claude Managed Agents](anthropic/ai-application/claude-managed-agents.md)
 
 ### MiniMax
-- 公司分析: [MiniMax 公司分析报告](minimax/general_intro.md) — 2026.01 港股 IPO（00100.HK）、海螺 AI / Talkie 全球化、MiniMax-M1/M2 开源混合注意力
+- 公司分析: [MiniMax 公司分析报告](minimax/general_intro.md) — 2026.01 港股 IPO（00100.HK）、海螺 AI / Talkie 全球化、MiniMax-M1/M2/M2.7 开源混合注意力，**M2.7 自我进化（模型自驱动训练）能力**
+- 模型系列: [M 系列](minimax/minimax-series.md) — M1/M2/M2.7/M3
 
 ### 智谱 AI（Zhipu）
 - 公司分析: [智谱 AI 公司分析报告](zhipu/general_intro.md) — 2026.01 港股 IPO（02513.HK，全球大模型第一股）、GLM-5 编程开源 SOTA、MaaS ARR 17 亿元
+- 模型系列: [GLM 系列](zhipu/glm-series.md) — GLM-4/4.5/4.6/5/5.1，**GLM-5.1 主推 8 小时级长程任务**
 
 ### DeepSeek（深度求索）
-- 公司分析: [DeepSeek 公司分析报告](deepseek/general_intro.md) ⭐ — MLA+MoE 架构创新、R1 纯 RL 推理、V4 开源 SOTA、557万美元训练成本、“DeepSeek 时刻”
+- 公司分析: [DeepSeek 公司分析报告](deepseek/general_intro.md) ⭐ — MLA+MoE 架构创新、R1 纯 RL 推理、V4 开源 SOTA、557万美元训练成本、"DeepSeek 时刻"
+- 模型系列: [V 系列](deepseek/deepseek-v-series.md) — V1/V2/V3/V3.2/V4 | [R 系列](deepseek/deepseek-r-series.md) — R1/R1-0528/R2
+
+### OpenAI
+- 公司分析: [OpenAI 公司分析报告](openai/general_intro.md) — GPT-5 系列、ChatGPT、Native Computer Use
+- 模型系列: [GPT-5 系列](openai/gpt-5-series.md) — GPT-5/5.2/5.3/5.4/5.5
 
 ## 线：对比分析（阿里云视角）
 

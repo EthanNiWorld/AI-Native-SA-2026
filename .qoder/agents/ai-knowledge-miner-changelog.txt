@@ -1,5 +1,13 @@
 # AI Knowledge Miner Changelog
 
+## 2026-05-27
+### 新增功能
+- 新增 Step 6.5「MaaS 销售洞察同步」（可选）
+  - 处理素材时，若内容对售卖大模型有启发，自动追加到 `notes/maas_sales_advice_ethan_2026.md`
+  - 5 类触发条件：定价优势、竞品差异化、迁移路径、运营要点、场景化选型
+  - 输出格式：简洁 bullet（不超过 2 行），按日期分组
+  - 该文件已加入 .gitignore
+
 ## 2026-05-14
 ### 新增功能
 - 支持 `notes/` 目录长期笔记的提炼（如 Daily note）

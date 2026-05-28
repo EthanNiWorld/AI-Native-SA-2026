@@ -23,6 +23,7 @@ node_modules/
 # 知识飞轮 - 敏感/临时目录
 inbox/*.md
 archive/*.md
+notes/maas_sales_advice_ethan*
 
 # 废弃的 PRD 版本
 knowledge_orginal_prd.md

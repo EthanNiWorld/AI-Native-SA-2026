@@ -36,12 +36,12 @@ tools: Read, Grep, Glob, Write, Bash
 |------|----------|------|
 | AI 领域通识 | `knowledge/ai-general-notes/{子领域}.md` | `knowledge/ai-general-notes/_template.md` |
 | MaaS 模型知识 | `knowledge/{厂商}/maas/{模型}.md` | `knowledge/_maas_template.md` |
-| 单产品知识 | `knowledge/{厂商}/{品类}/{产品}.md` | `knowledge/_product_template.md` |
+| 单产品知识 | 云厂商: `knowledge/{厂商}/{品类}/{产品}.md`<br>纯模型厂商: `knowledge/{厂商}/{产品}.md` | `knowledge/_product_template.md` |
 | 厂商竞争分析 | `knowledge/alibaba-cloud/competitive-analysis/{a-vs-b}/overview.md` | `knowledge/alibaba-cloud/competitive-analysis/_template.md` |
 | 行业解决方案 | `knowledge/solutions/{客群}/overview.md` | `knowledge/solutions/_template.md` |
 
-> 厂商取值：`alibaba-cloud` / `aws` / `gcp` / `anthropic`
-> 品类取值：`ai-coding` / `ai-app` / `ai-platform` / `ai-infra` / `maas`
+> **云厂商**（`alibaba-cloud` / `aws` / `gcp`）：品类取 `ai-coding` / `ai-application` / `ai-platform` / `ai-infra` / `maas`
+> **纯模型厂商**（`minimax` / `deepseek` / `openai` / `anthropic` / `zhipu` 等）：直接写入厂商根目录，无需品类子目录。Agent、Harness 等能力属模型能力延伸，非独立产品线。
 
 3. **语义搜索与智能合并（强化版）**：
    
@@ -72,6 +72,14 @@ tools: Read, Grep, Glob, Write, Bash
 
 4. 一篇素材涉及多个分类时，拆分为多篇文档（但优先合并到各类别现有文档）
 5. 如果觉得模板需要优化的可以和用户确认、交流
+
+### 文档命名规范
+
+- **顾名思义**：文件名能直观反映文档主题，避免模糊命名
+  - ✅ `agent-team.md`、`qwen.md`、`claude-code.md`、`gpt-5-series.md`
+  - ❌ `new-feature.md`、`update.md`、`misc.md`
+- 多个词用连字符分隔，全小写：`agent-team-design.md`
+- 版本号紧跟产品名：`deepseek-v4.md`、`gpt-5.1.md`
 
 ### Step 3 — 脱敏（必须执行）
 
@@ -144,11 +152,35 @@ tools: Read, Grep, Glob, Write, Bash
 5. 内容要求：简洁可执行，不超过 2 行，类似行业短洞察而非长篇技术文档
 6. 该文件已加入 .gitignore，不会提交到仓库
 
+### Step 6.6 — README 同步（新建文档时执行）
+
+> 仅新建/删除 knowledge 文档时触发。合并操作（复用现有索引）不触发。
+
+新建文档后，同步更新 `/README.md` 中的以下内容：
+
+**a) 统计横幅**：`📄 N 篇` 数量更新为当前 `knowledge/` 下 `.md` 文件总数（含模板）
+
+**b) 目录树厂商计数**：如文档归属厂商已在目录树中，更新对应行篇数（如 `阿里云（18 篇）` → `阿里云（19 篇）`）
+
+**c) 精华速览表**：如新文档在 index.md 中标记了 ⭐，追加一行到精华速览表末尾，格式：
+```
+| [文档标题](knowledge/xx/xx.md) | 一句话价值（从 SUMMARY 区块提取） |
+```
+
+**d) Mermaid 知识全景**：仅新增厂商或品类层级时，输出提醒 `> ⚠️ Mermaid 知识全景需人工确认更新`
+
+**操作方式**：
+- 读取 README.md → 精确定位需更新的行 → 使用 search_replace 逐项更新
+- 更新 README 底部的最后更新时间
+
+> ⚠️ README 结构较复杂，**仅更新可精确匹配的行**。Mermaid 图等复杂变更标注提醒即可。
+
 ## 读取策略（严格遵守，控制 Token）
 
 1. 只读 inbox/ 中指定文件
 2. 只读目标分类的模板文件（1 个）
 3. 读取 `/index.md` 用于分类判断和入库更新
+4. 读取 `/README.md` 用于新建文档后的同步更新
 
 ## 输出摘要
 
@@ -171,6 +203,7 @@ tools: Read, Grep, Glob, Write, Bash
 **已更新**
 - {合并到的现有文档列表} — 增量更新，未创建新文件 ✅
 - index.md — 新增 x 条索引（如未新建则为 0）
+- README.md — 同步统计/计数/精华表 ✅（如是合并操作则跳过）
 - archive/ — 原始素材已归档
 
 ## 边界

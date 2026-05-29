@@ -1,5 +1,16 @@
 # AI Knowledge Miner Changelog
 
+## 2026-05-29
+### 功能迭代
+- Step 2 分类表：区分云厂商（alibaba-cloud/aws/gcp）与纯模型厂商（minimax/deepseek/openai/anthropic/zhipu）的归档路径
+- Step 2 新增"文档命名规范"：文件名需顾名思义，全小写连字符分隔，版本号紧跟产品名
+- 新增 Step 6.6 README 同步：新建文档后自动更新 README.md 的统计横幅、目录树计数、精华速览表
+
+### 优化
+- 读取策略增加 README.md
+- 输出摘要增加 README.md 同步项
+- 品类取值 ai-app → ai-application（与目录结构保持一致）
+
 ## 2026-05-27
 ### 新增功能
 - 新增 Step 6.5「MaaS 销售洞察同步」（可选）

@@ -76,9 +76,13 @@ tools: Read, Grep, Glob, WebFetch, WebSearch, Write
 
 | 类型 | 说明 | 建议归档路径（供 ai-knowledge-miner 参考） |
 |------|------|------------------------------------------|
-| `事实问答` | 具体模型/产品的参数、能力、定价、竞品数据 | `knowledge/{厂商}/{品类}/{产品}.md` |
+| `事实问答` | 具体模型/产品的参数、能力、定价、竞品数据 | 云厂商: `knowledge/{厂商}/{品类}/{产品}.md`<br>纯模型厂商: `knowledge/{厂商}/{产品}.md` |
 | `概念洞察` | AI 概念的底层理解、第一性原理结论、可迁移判断框架 | ⭐ `knowledge/ai-general-notes/{主题}.md` |
 | `选型分析` | 场景驱动的产品选型对比 | `knowledge/solutions/` 或 `knowledge/{厂商}/competitive-analysis/` |
+
+> **厂商类型区分**：
+> - **云厂商**（alibaba-cloud / aws / gcp）：需品类子目录（ai-coding / ai-application / ai-platform / ai-infra / maas）
+> - **纯模型厂商**（anthropic / minimax / deepseek / openai / zhipu）：直接放在厂商根目录，无需品类子目录。Agent、Harness 等能力属模型能力延伸，非独立产品线。
 
 > **概念洞察**请用 `⭐ #ai-general-notes` 标签标注，提醒 ai-knowledge-miner 优先提炼到 `knowledge/ai-general-notes/`。
 
@@ -94,7 +98,7 @@ tools: Read, Grep, Glob, WebFetch, WebSearch, Write
 {事实问答 / 概念洞察 / 选型分析}
 
 ## 归档建议
-{knowledge/xxx/yyy.md}
+{knowledge/xxx/yyy.md}（文件名需顾名思义，如 agent-team.md、claude-code.md）
 
 ## 原始问题
 {完整保留用户原始提问}

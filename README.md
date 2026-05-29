@@ -9,6 +9,13 @@
   <b>🤖 2</b> 个 AI Agent 协作
 </p>
 
+<p align="center">
+  <a href="index.md"><img src="https://img.shields.io/badge/📋-全局索引-blue?style=for-the-badge" alt="全局索引"></a>
+  <a href="#-精华速览"><img src="https://img.shields.io/badge/⭐-精华速览-gold?style=for-the-badge" alt="精华速览"></a>
+  <a href="#-知识全景"><img src="https://img.shields.io/badge/🗺️-知识全景-green?style=for-the-badge" alt="知识全景"></a>
+  <a href="#-知识生产流水线"><img src="https://img.shields.io/badge/⚙️-生产流水线-purple?style=for-the-badge" alt="生产流水线"></a>
+</p>
+
 ---
 
 ## 📊 知识全景

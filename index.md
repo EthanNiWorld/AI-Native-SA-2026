@@ -1,7 +1,7 @@
 # 知识库全局索引
 
 > 本文件是知识库的全局索引，Skill 必读。
-> 最后更新：2026-05-27（修复 ai-app 路径笔误为 ai-application）
+> 最后更新：2026-05-29（新增 MiniMax Agent Team）
 
 ## 道：AI 领域知识（跨厂商）
 
@@ -49,6 +49,7 @@
 ### MiniMax
 - 公司分析: [MiniMax 公司分析报告](minimax/general_intro.md) — 2026.01 港股 IPO（00100.HK）、海螺 AI / Talkie 全球化、MiniMax-M1/M2/M2.7 开源混合注意力，**M2.7 自我进化（模型自驱动训练）能力**
 - 模型系列: [M 系列](minimax/minimax-series.md) — M1/M2/M2.7/M3
+- Agent: [Agent Team](minimax/agent-team.md) — Leader–Worker–Verifier 对抗制衡多Agent协作系统，Team Engine 状态机驱动
 
 ### 智谱 AI（Zhipu）
 - 公司分析: [智谱 AI 公司分析报告](zhipu/general_intro.md) — 2026.01 港股 IPO（02513.HK，全球大模型第一股）、GLM-5 编程开源 SOTA、MaaS ARR 17 亿元
